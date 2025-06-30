@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Admin\ManageProjects;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -18,5 +19,9 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+
+Route::get('admin/projects', ManageProjects::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.projects');   
 
 require __DIR__.'/auth.php';
