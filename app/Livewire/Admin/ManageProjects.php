@@ -4,9 +4,14 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Project;
+use Livewire\WithFileUploads; 
+use Illuminate\Support\Facades\Storage;
+
 
 class ManageProjects extends Component
 {
+    use WithFileUploads; 
+    
     // Properti untuk menampung semua project yang akan ditampilkan
     public $projects;
 
@@ -16,6 +21,7 @@ class ManageProjects extends Component
     public $description;
     public $image_path; 
     public $project_url;
+    public $existingImage; 
 
     // Properti untuk mengontrol modal
     public $isModalOpen = false;
@@ -73,6 +79,7 @@ class ManageProjects extends Component
         $this->description = '';
         $this->image_path = null; 
         $this->project_url = '';
+        $this->existingImage = null; 
     }
 
     /**
@@ -96,6 +103,26 @@ class ManageProjects extends Component
             'project_url' => $this->project_url,
         ]);
 
+        $imagePath = $this->existingImage;
+        if($this->image_path){
+            if($this->existingImage){
+                Storage::delete($this->existingImage);
+            }
+
+        $imagePath = $this->image_path->store('projects', 'public');
+    }
+
+    Project::updateOrCreate(
+            ['id' => $this->projectId],
+            [
+                'title' => $this->title,
+                'description' => $this->description,
+                'image_path' => $imagePath, // Simpan path gambar
+                'pubslish_at' => now(), // Atau bisa diisi dengan tanggal tertentu
+                'project_url' => $this->project_url,
+            ]
+        );
+
         // Menampilkan pesan sukses
         session()->flash('message', 
             $this->projectId ? 'Proyek berhasil diperbarui.' : 'Proyek berhasil dibuat.');
@@ -118,8 +145,10 @@ class ManageProjects extends Component
         $this->projectId = $id;
         $this->title = $project->title;
         $this->description = $project->description;
-        $this->image_path = $project->image_path; 
         $this->project_url = $project->project_url;
+        $this->existingImage = $project->image_path; 
+        $this->image_path = null; 
+
 
         $this->openModal();
     }
@@ -130,9 +159,19 @@ class ManageProjects extends Component
      */
     public function delete($id)
     {
-        Project::find($id)->delete();
+        $project = Project::findOrFail($id);
+
+        // Hapus gambar terkait jika ada
+        if ($project->image_path) {
+            Storage::delete($project->image_path);
+        }
+
+        // Hapus proyek dari database
+        $project->delete();
+
+        // Menampilkan pesan sukses
         session()->flash('message', 'Proyek berhasil dihapus.');
-        
+
         // Refresh daftar proyek
         $this->projects = Project::all();
     }

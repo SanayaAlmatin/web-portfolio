@@ -32,9 +32,7 @@
                     <div class="mb-4">
                         <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Gambar (Opsional):</label>
                         <input type="file" id="image" wire:model.lazy="image" accept="image/*" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                        @if ($image_path)
-                            <img src="{{ $image->temporaryUrl() }}" alt="Preview Gambar" class="mt-2 w-full h-auto rounded">
-                        @endif
+                        <div wire:loading wire:target="image" class="text-sm text-gray-500 mt-1">Mengunggah...</div>
                         @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
@@ -60,10 +58,12 @@
     <div class="overflow-x-auto bg-white rounded-lg shadow">
         <table class="min-w-full leading-normal">
             <thead>
-                <tr>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Judul</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">URL</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+                <tr class="text-left">
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">Judul</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">Deskripsi</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">Gambar</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">Url Project</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,6 +72,15 @@
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">{{ $project->title }}</p>
                         </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p class="text-gray-900 whitespace-no-wrap">{{ $project->description }}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            @if ($project->image_path)
+                                <img src="{{ asset('storage/' . $project->image_path) }}" alt="{{ $project->title }}" class="w-16 h-16 object-cover rounded">
+                            @else
+                                <span class="text-gray-500">Tidak ada gambar</span>
+                            @endif
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <a href="{{ $project->project_url }}" target="_blank" class="text-blue-500 hover:text-blue-800">{{ $project->project_url }}</a>
                         </td>
