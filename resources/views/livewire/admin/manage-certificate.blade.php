@@ -1,11 +1,11 @@
 <div class="p-6">
-    <h2 class="text-2xl font-semibold mb-4">Manajemen Proyek</h2>
+    <h2 class="text-2xl font-semibold mb-4">Manajemen Sertifikat</h2>
 
     <button
         wire:click="create()"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+        class="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4"
     >
-        Tambah Proyek Baru
+        Tambah Sertifikat Baru
     </button>
 
     @if (session()->has('message'))
@@ -23,7 +23,7 @@
         >
             <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
                 <h3 class="text-xl font-semibold mb-4">
-                    {{ $projectId ? 'Edit Proyek' : 'Tambah Proyek Baru' }}
+                    {{ $certificateId ? 'Edit Sertifikat' : 'Tambah Sertifikat Baru' }}
                 </h3>
 
                 <form wire:submit.prevent="store" enctype="multipart/form-data">
@@ -32,7 +32,7 @@
                             for="title"
                             class="block text-gray-700 text-sm font-bold mb-2"
                         >
-                            Judul:
+                            Nama Sertifikat:
                         </label>
                         <input
                             type="text"
@@ -69,46 +69,26 @@
 
                     <div class="mb-4">
                         <label
-                            for="image"
+                            for="image_path"
                             class="block text-gray-700 text-sm font-bold mb-2"
                         >
                             Gambar (Opsional):
                         </label>
                         <input
                             type="file"
-                            id="image"
+                            id="image_path"
                             wire:model="image_path"
                             accept="image/*"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                         <div
                             wire:loading
-                            wire:target="image"
+                            wire:target="image_path"
                             class="text-sm text-gray-500 mt-1"
                         >
                             Mengunggah...
                         </div>
-                        @error('image')
-                            <span class="text-red-500 text-xs">
-                                {{ $message }}
-                            </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label
-                            for="project_url"
-                            class="block text-gray-700 text-sm font-bold mb-2"
-                        >
-                            URL Proyek (Opsional):
-                        </label>
-                        <input
-                            type="url"
-                            id="project_url"
-                            wire:model.lazy="project_url"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        />
-                        @error('project_url')
+                        @error('image_path')
                             <span class="text-red-500 text-xs">
                                 {{ $message }}
                             </span>
@@ -138,91 +118,71 @@
     <div class="overflow-x-auto bg-white rounded-lg shadow">
         <table class="min-w-full leading-normal">
             <thead>
-                <tr class="text-left">
+                <tr>
                     <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                     >
-                        Judul
+                        Nama Sertifikat
                     </th>
                     <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                     >
                         Deskripsi
                     </th>
                     <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                     >
                         Gambar
                     </th>
                     <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider"
-                    >
-                        Url Project
-                    </th>
-                    <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                     >
                         Aksi
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($projects as $project)
+                @foreach ($certificates as $certificate)
                     <tr>
                         <td
                             class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                         >
                             <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $project->title }}
+                                {{ $certificate->title }}
                             </p>
                         </td>
                         <td
                             class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                         >
                             <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $project->description }}
+                                {{ $certificate->description }}
                             </p>
                         </td>
                         <td
                             class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                         >
-                            @if ($project->image_path)
+                            @if ($certificate->image_path)
                                 <img
-                                    src="{{ asset('storage/' . $project->image_path) }}"
-                                    alt="{{ $project->title }}"
-                                    class="w-16 h-16 object-cover rounded"
+                                    src="{{ asset('storage/' . $certificate->image_path) }}"
+                                    alt="{{ $certificate->title }}"
+                                    class="w-16 h-auto"
                                 />
                             @else
-                                <span class="text-gray-500">
                                     Tidak ada gambar
-                                </span>
                             @endif
-                        </td>
-
-                        <td
-                            class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-                        >
-                            <a
-                                href="{{ $project->project_url }}"
-                                target="_blank"
-                                class="text-blue-500 hover:text-blue-800"
-                            >
-                                {{ $project->project_url }}
-                            </a>
                         </td>
                         <td
                             class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                         >
                             <button
-                                wire:click="edit({{ $project->id }})"
-                                class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded text-xs"
+                                wire:click="edit({{ $certificate->id }})"
+                                class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded mr-2"
                             >
                                 Edit
                             </button>
                             <button
-                                wire:click="delete({{ $project->id }})"
-                                wire:confirm="Anda yakin ingin menghapus proyek ini?"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs"
+                                wire:click="delete({{ $certificate->id }})"
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
                             >
                                 Hapus
                             </button>

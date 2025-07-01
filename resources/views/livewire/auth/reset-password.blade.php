@@ -35,7 +35,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $this->validate([
             'token' => ['required'],
             'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                Rules\Password::defaults(),
+            ],
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
@@ -44,13 +49,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $status = Password::reset(
             $this->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) {
-                $user->forceFill([
-                    'password' => Hash::make($this->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
+                $user
+                    ->forceFill([
+                        'password' => Hash::make($this->password),
+                        'remember_token' => Str::random(60),
+                    ])
+                    ->save();
 
                 event(new PasswordReset($user));
-            }
+            },
         );
 
         // If the password was successfully reset, we will redirect the user back to
@@ -69,7 +76,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
 }; ?>
 
 <div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" />
+    <x-auth-header
+        :title="__('Reset password')"
+        :description="__('Please enter your new password below')"
+    />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />

@@ -16,5 +16,4 @@ class Project extends Model
         'image_path',
         'project_url',
     ];
-    
 }

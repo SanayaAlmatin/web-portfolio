@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Admin\ManageCertificate;
 use App\Livewire\Admin\ManageProjects;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -22,6 +23,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('admin/projects', ManageProjects::class)
     ->middleware(['auth', 'verified'])
-    ->name('admin.projects');   
+    ->name('admin.projects');
+
+Route::get('admin/certificate', ManageCertificate::class)
+        ->middleware(['auth', 'verified'])
+        ->name('admin.certificates');
 
 require __DIR__.'/auth.php';

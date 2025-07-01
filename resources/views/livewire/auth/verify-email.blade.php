@@ -13,7 +13,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public function sendVerification(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+            $this->redirectIntended(
+                default: route('dashboard', absolute: false),
+                navigate: true,
+            );
 
             return;
         }
@@ -40,13 +43,19 @@ new #[Layout('components.layouts.auth')] class extends Component {
     </flux:text>
 
     @if (session('status') == 'verification-link-sent')
-        <flux:text class="text-center font-medium !dark:text-green-400 !text-green-600">
+        <flux:text
+            class="text-center font-medium !dark:text-green-400 !text-green-600"
+        >
             {{ __('A new verification link has been sent to the email address you provided during registration.') }}
         </flux:text>
     @endif
 
     <div class="flex flex-col items-center justify-between space-y-3">
-        <flux:button wire:click="sendVerification" variant="primary" class="w-full">
+        <flux:button
+            wire:click="sendVerification"
+            variant="primary"
+            class="w-full"
+        >
             {{ __('Resend verification email') }}
         </flux:button>
 

@@ -2,26 +2,30 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
 use App\Models\Project;
-use Livewire\WithFileUploads; 
 use Illuminate\Support\Facades\Storage;
-
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ManageProjects extends Component
 {
-    use WithFileUploads; 
-    
+    use WithFileUploads;
+
     // Properti untuk menampung semua project yang akan ditampilkan
     public $projects;
 
     // Properti untuk form, dihubungkan dengan wire:model di view
     public $projectId;
+
     public $title;
+
     public $description;
-    public $image_path; 
+
+    public $image_path;
+
     public $project_url;
-    public $existingImage; 
+
+    public $existingImage;
 
     // Properti untuk mengontrol modal
     public $isModalOpen = false;
@@ -77,9 +81,9 @@ class ManageProjects extends Component
         $this->projectId = null;
         $this->title = '';
         $this->description = '';
-        $this->image_path = null; 
+        $this->image_path = null;
         $this->project_url = '';
-        $this->existingImage = null; 
+        $this->existingImage = null;
     }
 
     /**
@@ -91,28 +95,22 @@ class ManageProjects extends Component
         $this->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image_path' => 'nullable|image|max:2048', 
+            'image_path' => 'nullable|image|max:2048',
             'project_url' => 'nullable|url',
         ]);
 
-        Project::updateOrCreate(['id' => $this->projectId], [
-            'title' => $this->title,
-            'description' => $this->description,
-            'image_path' => $this->image_path, // Asumsi ini adalah path ke gambar yang sudah diupload
-            'pubslish_at' => now(), // Atau bisa diisi dengan tanggal tertentu
-            'project_url' => $this->project_url,
-        ]);
+        // dd($this->image_path);
 
         $imagePath = $this->existingImage;
-        if($this->image_path){
-            if($this->existingImage){
+        if ($this->image_path) {
+            if ($this->existingImage) {
                 Storage::delete($this->existingImage);
             }
 
-        $imagePath = $this->image_path->store('projects', 'public');
-    }
+            $imagePath = $this->image_path->store('projects', 'public');
+        }
 
-    Project::updateOrCreate(
+        Project::updateOrCreate(
             ['id' => $this->projectId],
             [
                 'title' => $this->title,
@@ -124,20 +122,21 @@ class ManageProjects extends Component
         );
 
         // Menampilkan pesan sukses
-        session()->flash('message', 
+        session()->flash('message',
             $this->projectId ? 'Proyek berhasil diperbarui.' : 'Proyek berhasil dibuat.');
 
         // Menutup modal dan mereset form
         $this->closeModal();
         $this->resetForm();
-        
+
         // Refresh daftar proyek
         $this->projects = Project::all();
     }
 
     /**
      * Mengisi form dengan data dari proyek yang akan di-edit.
-     * @param int $id ID dari proyek
+     *
+     * @param  int  $id  ID dari proyek
      */
     public function edit($id)
     {
@@ -146,16 +145,16 @@ class ManageProjects extends Component
         $this->title = $project->title;
         $this->description = $project->description;
         $this->project_url = $project->project_url;
-        $this->existingImage = $project->image_path; 
-        $this->image_path = null; 
-
+        $this->existingImage = $project->image_path;
+        $this->image_path = null;
 
         $this->openModal();
     }
 
     /**
      * Menghapus proyek dari database.
-     * @param int $id ID dari proyek
+     *
+     * @param  int  $id  ID dari proyek
      */
     public function delete($id)
     {
