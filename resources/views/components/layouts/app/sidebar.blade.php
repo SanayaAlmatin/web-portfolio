@@ -19,18 +19,12 @@
                 <x-app-logo />
             </a>
 
-            <!-- <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                </flux:navlist.group>
-            </flux:navlist> -->
-
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Admin')" class="grid">
                     <flux:navlist.item
                         icon="folder"
-                        :href="route('admin.projects')"
-                        :current="request()->routeIs('admin.projects.*')"
+                        :href="route('home')"
+                        :current="request()->routeIs('home')"
                         wire:navigate
                     >
                         <b>{{ __('Projects') }}</b>

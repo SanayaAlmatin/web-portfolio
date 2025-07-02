@@ -46,7 +46,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         Session::regenerate();
 
         $this->redirectIntended(
-            default: route('dashboard', absolute: false),
+            default: route('home', absolute: false),
             navigate: true,
         );
     }

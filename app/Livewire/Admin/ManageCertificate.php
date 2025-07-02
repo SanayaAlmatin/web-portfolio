@@ -72,7 +72,7 @@ class ManageCertificate extends Component
             'image_path' => 'nullable|image|max:2048',
         ]);
 
-        // dd($this->image_path);
+        //dd($this->image_path);
 
         $imagePath = $this->existingImage;
         if ($this->image_path) {

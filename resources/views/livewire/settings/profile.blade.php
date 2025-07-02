@@ -59,7 +59,7 @@ new class extends Component {
 
         if ($user->hasVerifiedEmail()) {
             $this->redirectIntended(
-                default: route('dashboard', absolute: false),
+                default: route('home', absolute: false),
             );
 
             return;

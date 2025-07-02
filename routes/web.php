@@ -5,13 +5,9 @@ use App\Livewire\Admin\ManageProjects;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-Route::view('dashboard', 'dashboard')
+Route::get('/', ManageProjects::class)
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -20,10 +16,6 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
-
-Route::get('admin/projects', ManageProjects::class)
-    ->middleware(['auth', 'verified'])
-    ->name('admin.projects');
 
 Route::get('admin/certificate', ManageCertificate::class)
         ->middleware(['auth', 'verified'])
